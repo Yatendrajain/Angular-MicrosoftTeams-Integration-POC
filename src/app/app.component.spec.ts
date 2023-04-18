@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'ms-teams-poc'`, () => {
+  it(`should have as title 'msal-angular-poc'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ms-teams-poc');
+    expect(app.title).toEqual('msal-angular-poc');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('ms-teams-poc app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('msal-angular-poc app is running!');
   });
 });
