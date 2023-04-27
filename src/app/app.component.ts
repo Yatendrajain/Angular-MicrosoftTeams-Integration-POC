@@ -8,22 +8,27 @@ import {
 import { InteractionStatus, PopupRequest } from '@azure/msal-browser';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { Router, NavigationEnd } from '@angular/router';
+import { ChatService } from './services/chat.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'msal-angular-tutorial';
   isIframe = false;
   loginDisplay = false;
+  isChatDetailVisible = false;
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private broadcastService: MsalBroadcastService,
-    private authService: MsalService
+    private authService: MsalService,
+    private chatService: ChatService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -39,6 +44,25 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.setLoginDisplay();
       });
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.setLoginDisplay();
+      }
+    });
+
+    // Handle authentication
+    this.authService.handleRedirectObservable().subscribe({
+      next: (result: any) => {
+        if (result) {
+          this.chatService.setToken(result.accessToken);
+          this.setLoginDisplay();
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   login() {
@@ -64,7 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    // Add log out function here
+    this.chatService.setToken(null);
     this.authService.logoutPopup({
       mainWindowRedirectUri: '/',
     });

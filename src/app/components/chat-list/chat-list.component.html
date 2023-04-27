@@ -1,0 +1,5 @@
+<div *ngFor="let chat of chats" class="chat-list-item" (click)="selectChat(chat)">
+    <h2>{{ chat.onlineMeetingInfo.organizer.displayName }}</h2>
+    <h2>{{ chat.topic }}</h2>
+    <p>{{ chat.viewpoint.lastMessageReadDateTime }}</p>
+</div>

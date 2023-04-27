@@ -1,0 +1,10 @@
+<h2>Chat Detail: {{ chat?.topic }}</h2>
+<ul>
+    <li *ngFor="let message of messages">
+        <p [innerHTML]="message.body.content"></p>
+    </li>
+</ul>
+<form (ngSubmit)="sendMessage()">
+    <input type="text" [(ngModel)]="newMessage" />
+    <button type="submit">Send</button>
+</form>

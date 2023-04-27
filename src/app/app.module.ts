@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,13 +21,22 @@ import {
 } from '@azure/msal-angular';
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 import { environment } from 'src/environments/environment';
+import { ChatService } from './services/chat.service';
+import { ChatListComponent } from './components/chat-list/chat-list.component';
+import { ChatDetailComponent } from './components/chat-detail/chat-detail.component';
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, ProfileComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    ProfileComponent,
+    ChatListComponent,
+    ChatDetailComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -34,6 +44,9 @@ const isIE =
     MatButtonModule,
     MatToolbarModule,
     MatListModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -55,18 +68,28 @@ const isIE =
       {
         interactionType: InteractionType.Redirect, // MSAL Interceptor Configuration
         protectedResourceMap: new Map([
-          [environment.msGraphApi, ['user.read', 'Group.ReadWrite.All']],
+          [
+            environment.msGraphApi,
+            [
+              'User.Read',
+              'Chat.ReadWrite',
+              'ChatMessage.Send',
+              'ChatMessage.Read',
+              'Group.ReadWrite.All',
+            ],
+          ],
         ]),
       }
     ),
   ],
   providers: [
+    ChatService,
+    MsalGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true,
     },
-    MsalGuard,
   ],
   bootstrap: [AppComponent, MsalRedirectComponent],
 })
