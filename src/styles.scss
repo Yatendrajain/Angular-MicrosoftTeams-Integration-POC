@@ -1,4 +1,13 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+$font-family: 'Poppins',
+sans-serif;
+
+* {
+  font-family: $font-family;
+}
+
 
 html,
 body {

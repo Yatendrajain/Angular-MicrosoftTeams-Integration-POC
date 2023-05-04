@@ -1,0 +1,107 @@
+// Colors
+$primary: #007bff;
+$gray: #ced4da;
+$black: #343a40;
+$white: #ffffff;
+
+// Fonts
+$primary-font: 'Poppins',
+sans-serif;
+
+.chat-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: $white;
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid $gray;
+
+    .chat-title {
+      font-family: $primary-font;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+
+  .chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 20px;
+
+      &.sent {
+        align-items: flex-end;
+      }
+
+      .message-content {
+        max-width: 70%;
+        padding: 10px;
+        border-radius: 20px;
+        box-shadow: 0 2px 4px rgba($black, 0.1);
+
+        &.sent {
+          background-color: $primary;
+          color: $white;
+        }
+      }
+
+      .message-time {
+        font-size: 0.8rem;
+        color: $gray;
+        margin-top: 5px;
+      }
+    }
+  }
+
+  .message-input {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+
+    .message-input-field {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 2px 4px rgba($black, 0.1);
+      font-family: $primary-font;
+      font-size: 1rem;
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 2px 4px rgba($black, 0.2);
+      }
+    }
+
+    .send-button {
+      margin-left: 10px;
+      background-color: $primary;
+      color: $white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba($black, 0.1);
+      font-family: $primary-font;
+      font-size: 1rem;
+
+      &:hover {
+        background-color: darken($primary, 5%);
+      }
+
+      &:active {
+        background-color: darken($primary, 10%);
+      }
+    }
+  }
+}

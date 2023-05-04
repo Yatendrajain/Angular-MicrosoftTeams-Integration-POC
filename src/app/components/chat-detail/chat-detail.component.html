@@ -1,10 +1,18 @@
 <h2>Chat Detail: {{ chat?.topic }}</h2>
-<ul>
-    <li *ngFor="let message of messages">
-        <p [innerHTML]="message.body.content"></p>
-    </li>
-</ul>
-<form (ngSubmit)="sendMessage()">
-    <input type="text" [(ngModel)]="newMessage" />
-    <button type="submit">Send</button>
-</form>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2 class="chat-title">Chat Title</h2>
+    </div>
+    <div class="chat-messages">
+        <div class="chat-message user-message" *ngFor="let message of messages">
+            <div class="message-bubble">
+                <p class="message-text" [innerHTML]="message.body.content"></p>
+                <span class="message-timestamp">10:00 am</span>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="messageForm" class="chat-input">
+        <input type="text" formControlName="messageBody" placeholder="Type your message here" />
+        <button class="send-button" (click)="sendMessage()">Send</button>
+    </form>
+</div>

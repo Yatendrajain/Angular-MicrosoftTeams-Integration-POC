@@ -3,16 +3,21 @@ import { ActivatedRoute } from '@angular/router';
 import { ChatService } from './../../services/chat.service';
 import { Chat } from './../../models/chat.model';
 import { ChatMessage } from './../../models/chat-message.model';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-chat-detail',
   templateUrl: './chat-detail.component.html',
+  styleUrls: ['./chat-detail.component.scss'],
 })
 export class ChatDetailComponent implements OnInit {
   chatId: string;
   chat: Chat;
   messages: ChatMessage[];
-  newMessage: string;
+
+  messageForm = new FormGroup({
+    messageBody: new FormControl(''),
+  });
 
   constructor(
     private route: ActivatedRoute,
@@ -36,9 +41,11 @@ export class ChatDetailComponent implements OnInit {
 
   sendMessage() {
     this.chatService
-      .sendChatMessage(this.chatId, this.newMessage)
+      .sendChatMessage(this.chatId, this.messageForm.get('messageBody').value)
       .subscribe(() => {
-        this.newMessage = '';
+        this.messageForm.patchValue({
+          messageBody: '',
+        });
         this.loadMessages();
       });
   }

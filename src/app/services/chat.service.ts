@@ -15,7 +15,7 @@ export class ChatService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAllChats(): Observable<ChatResponse> {
-    const url = `${this.graphEndpoint}/me/chats`;
+    const url = `${this.graphEndpoint}/me/chats?$top=50&$filter=chatType eq 'group'`;
     return this.http.get<ChatResponse>(url, {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.authService.getAccessToken()}`,
@@ -34,12 +34,25 @@ export class ChatService {
 
   sendChatMessage(chatId: string, message: string): Observable<any> {
     const url = `${this.graphEndpoint}/chats/${chatId}/messages`;
+    console.log({ message });
     const payload = {
       body: {
         content: message,
       },
     };
     return this.http.post(url, payload, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.authService.getAccessToken()}`,
+        'Content-Type': 'application/json'
+      }),
+    });
+  }
+  
+  
+
+  getChatParticipants(chatId: string): Observable<any> {
+    const url = `${this.graphEndpoint}/chats/${chatId}/members`;
+    return this.http.get(url, {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.authService.getAccessToken()}`,
       }),
