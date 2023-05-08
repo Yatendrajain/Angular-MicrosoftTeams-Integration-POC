@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,6 +25,7 @@ import { environment } from 'src/environments/environment';
 import { ChatService } from './services/chat.service';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ChatDetailComponent } from './components/chat-detail/chat-detail.component';
+import { TeamsChatComponent } from './pages/teams-chat/teams-chat.component';
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||
@@ -36,11 +38,13 @@ const isIE =
     ProfileComponent,
     ChatListComponent,
     ChatDetailComponent,
+    TeamsChatComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    CommonModule,
     MatButtonModule,
     MatToolbarModule,
     MatListModule,

@@ -1,23 +1,26 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ChatService } from './../../services/chat.service';
 import { Chat } from './../../models/chat.model';
+import { ChatHelper } from 'src/app/helpers/chat.helper';
+import { ActivatedRoute } from '@angular/router';
 import { ChatMessage } from './../../models/chat-message.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ChatHelper } from 'src/app/helpers/chat.helper';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-chat-detail',
-  templateUrl: './chat-detail.component.html',
-  styleUrls: ['./chat-detail.component.scss'],
+  selector: 'app-teams-chat',
+  templateUrl: './teams-chat.component.html',
+  styleUrls: ['./teams-chat.component.scss'],
 })
-export class ChatDetailComponent implements OnInit, OnDestroy {
+export class TeamsChatComponent implements OnInit {
+  chatsList: Chat[];
   chatId: string = '';
-  genericUserId: string = '';
   chat: Chat = null;
+
+  genericUserId: string = environment.genericUserId;
+
   messages$: Observable<ChatMessage[]>;
 
   messageForm = new FormGroup({
@@ -25,35 +28,36 @@ export class ChatDetailComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private route: ActivatedRoute,
     private chatService: ChatService,
-    private chatHelper: ChatHelper
+    public chatHelper: ChatHelper
   ) {}
 
-  ngOnInit(): void {
-    this.chatId = this.route.snapshot.paramMap.get('id');
-    this.genericUserId = environment.genericUserId;
+  getChatList = () => {
+    this.chatService.getAllChats().subscribe((result) => {
+      this.chatsList = result.value.filter((x) => x.topic);
+    });
+  };
+
+  onChatClick = (chatId: string) => {
+    this.chatId = chatId;
     this.getChatDetails();
-    this.loadMessages();
-  }
+    this.getSelectedChatMessages();
+  };
 
   getChatDetails() {
-    this.chat = this.chatHelper.selectedChat;
-    if (this.chat == null) {
-      this.chatService.getChatDetails(this.chatId).subscribe({
-        next: (details) => {
-          this.chat = details;
-        },
-        error: (err) => console.error(err),
-      });
-    }
+    this.chatService.getChatDetails(this.chatId).subscribe({
+      next: (details) => {
+        this.chat = details;
+      },
+      error: (err) => console.error(err),
+    });
   }
 
-  loadMessages() {
+  getSelectedChatMessages = () => {
     this.messages$ = this.chatService
       .getChatMessages(this.chatId)
-      .pipe(map((result) => result.value));
-  }
+      .pipe(map((result) => result.value.reverse()));
+  };
 
   sendMessage() {
     this.chatService
@@ -62,11 +66,11 @@ export class ChatDetailComponent implements OnInit, OnDestroy {
         this.messageForm.patchValue({
           messageBody: '',
         });
-        this.loadMessages();
+        this.getSelectedChatMessages();
       });
   }
 
-  ngOnDestroy(): void {
-    this.chatHelper.selectedChat = null;
+  ngOnInit() {
+    this.getChatList();
   }
 }

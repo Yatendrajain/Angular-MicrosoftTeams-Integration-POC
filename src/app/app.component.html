@@ -5,6 +5,7 @@
 
   <a mat-button [routerLink]="['profile']">Profile</a>
   <a mat-button [routerLink]="['chats']">Chat</a>
+  <a mat-button [routerLink]="['teamschat']">Teams Chat</a>
 
   <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">Login</button>
   <button mat-raised-button *ngIf="loginDisplay" (click)="logout()">Logout</button>

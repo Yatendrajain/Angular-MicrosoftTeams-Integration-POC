@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { ChatResponse } from '../models/chat.model';
+import { ChatResponse, Chat } from '../models/chat.model';
 import { ChatMessageResponse } from '../models/chat-message.model';
 
 @Injectable({
@@ -43,16 +43,23 @@ export class ChatService {
     return this.http.post(url, payload, {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.authService.getAccessToken()}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }),
     });
   }
-  
-  
 
   getChatParticipants(chatId: string): Observable<any> {
     const url = `${this.graphEndpoint}/chats/${chatId}/members`;
     return this.http.get(url, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.authService.getAccessToken()}`,
+      }),
+    });
+  }
+
+  getChatDetails(chatId: string): Observable<Chat> {
+    const url = `${this.graphEndpoint}/chats/${chatId}`;
+    return this.http.get<Chat>(url, {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.authService.getAccessToken()}`,
       }),

@@ -5,6 +5,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ChatDetailComponent } from './components/chat-detail/chat-detail.component';
+import { TeamsChatComponent } from './pages/teams-chat/teams-chat.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: 'chats/:id',
     component: ChatDetailComponent,
+    canActivate: [MsalGuard],
+  },
+  {
+    path: 'teamschat',
+    component: TeamsChatComponent,
     canActivate: [MsalGuard],
   },
 ];

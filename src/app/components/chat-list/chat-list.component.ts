@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ChatService } from './../../services/chat.service';
 import { Chat } from './../../models/chat.model';
 import { Router } from '@angular/router';
+import { ChatHelper } from 'src/app/helpers/chat.helper';
 
 @Component({
   selector: 'app-chat-list',
@@ -10,12 +11,15 @@ import { Router } from '@angular/router';
 })
 export class ChatListComponent implements OnInit {
   @Input() chats: Chat[];
-  @Output() chatSelected = new EventEmitter<Chat>();
 
-  constructor(private chatService: ChatService, private router: Router) {}
+  constructor(
+    private chatService: ChatService,
+    private router: Router,
+    private chatHelper: ChatHelper
+  ) {}
 
   selectChat(chat: Chat) {
-    this.chatSelected.emit(chat);
+    this.chatHelper.selectedChat = chat;
     this.router.navigate(['/chats', chat.id]);
   }
 
